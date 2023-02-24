@@ -59,7 +59,7 @@ class Equipe {
         }
     }
 }
-
+/*
 const $equipe = new Equipe();
 const journaliste1 = new Journaliste("Bob", "blabla", "Intelo", "#FF0000FF");
 const journaliste2 = new Journaliste("Jo", "blabla", "Geek", "#00FF00FF");
@@ -77,3 +77,27 @@ $equipe2.deserialiser($jsonObject); // Appeler ma propre méthode de désériali
 const journaliste3 = new Journaliste("Érika", "blabla", "Nouveliste", "#0000FFFF");
 $equipe2.ajouterJournaliste(journaliste3);
 $("#equipe").append($equipe2.toString());
+*/
+$("form").submit(function (){
+    // TODO : Validation
+});
+
+// Au chargement (pas besoin de fonction si on utilise defer
+// Créer une équipe
+const $equipe = new Equipe();
+// Désérialiser l'équipe contenu dans la session
+const $jsonObject = JSON.parse(sessionStorage.getItem("equipe"));
+$equipe.deserialiser($jsonObject);
+
+// Récupérer les données de l'URL
+let urlData = location.search.substring(1);
+let tabData = urlData.split("&");
+
+if(urlData !== "" && tabData[0].split("=")[0] === "nom"){
+    // Créer un journaliste
+    const $journaliste = new Journaliste(tabData[0].split("=")[1], tabData[1].split("=")[1], tabData[2].split("=")[1], "#"+tabData[3].split("=")[1].substring(3));
+    $equipe.ajouterJournaliste($journaliste)
+
+    $("#equipe").append($equipe.toString());
+}
+

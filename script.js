@@ -46,7 +46,12 @@ class Equipe {
     }
 
     deserialiser(obj) {
-        Object.assign(this, obj);
+        /**
+         * Recréer un objet Equipe à partir d'un objet désérialisé à l'aide de JSON
+         * obj : l'objet à désérialiser
+         */
+        Object.assign(this, obj); // Copier toutes les propriétés de l'objet obj dans l'objet équipe
+        // Désérialiser chaque journaliste
         for(let i = 0; i < this.tabJournalistes.length; i++){
             let journaliste = new Journaliste();
             journaliste.deserialiser(this.tabJournalistes[i]);
@@ -61,11 +66,13 @@ const journaliste2 = new Journaliste("Jo", "blabla", "Geek", "#00FF00FF");
 $equipe.ajouterJournaliste(journaliste1);
 $equipe.ajouterJournaliste(journaliste2);
 
+// Sérialiser : transformer l'objet en chaine de caractères, ici en format JSON
+sessionStorage.setItem("equipe", JSON.stringify($equipe)); // Sérialiser et sauvegarder dans la session
 
-sessionStorage.setItem("equipe", JSON.stringify($equipe));
-$jsonObject = JSON.parse(sessionStorage.getItem("equipe"));
+// Désérialiser : reconstituer une variable objet à partir d'une chaine de caractère (JSON)
+$jsonObject = JSON.parse(sessionStorage.getItem("equipe")); // JSON.parse désérialise en type Object
 const $equipe2 = new Equipe();
-$equipe2.deserialiser($jsonObject);
+$equipe2.deserialiser($jsonObject); // Appeler ma propre méthode de désérialisation avec l'objet créé par JSON
 
 const journaliste3 = new Journaliste("Érika", "blabla", "Nouveliste", "#0000FFFF");
 $equipe2.ajouterJournaliste(journaliste3);

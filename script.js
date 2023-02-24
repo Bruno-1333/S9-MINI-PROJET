@@ -76,4 +76,4 @@ $equipe2.deserialiser($jsonObject); // Appeler ma propre méthode de désériali
 
 const journaliste3 = new Journaliste("Érika", "blabla", "Nouveliste", "#0000FFFF");
 $equipe2.ajouterJournaliste(journaliste3);
-$("#equipe").html($equipe2.toString());
+$("#equipe").append($equipe2.toString());

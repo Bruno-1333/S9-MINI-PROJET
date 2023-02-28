@@ -23,6 +23,7 @@
   <input class="col-12" id="nom" type="text" name="nom">
   <label class="row px-3" for="bio">Brève biographie</label>
   <textarea class="col-12" id="bio" name="bio"></textarea>
+  <p id="erreurBio" class="alert alert-danger d-none">La biographie doit contenir un point d’exclamation (!) et commencer par une majuscule. </p>
   <div class="row">
   <label class="col-3 float-start" for="specialite">Spécialité</label>
   <select class="col-4 float-start" id="specialite" name="specialite">
@@ -33,6 +34,10 @@
   <label class="col-3" for="couleur">Couleur préférée</label>
   <input class="col-1 form-control form-control-color" id="couleur" name="couleur" type="color">
   </div>
+  <div class="row">
+    <span id="erreurSpecialite" class="alert alert-danger d-none">La spécialité est déjà choisie</span>
+    <span id="erreurCouleur" class="alert alert-danger d-none">La couleur est déjà choisie</span>
+  </div>
   <div class="row py-2">
     <div class="col-5"></div>
   <input class="col-3" type="submit" value="Soumettre">
@@ -41,6 +46,10 @@
 </form>
 <div id="equipe" class="col-4 p-4">
   <h2>Notre équipe</h2>
+  <div class='JournalisteEquipe row border'>
+    <span class='nomJournalisteEquipe col-5 float-start'></span>
+    <span class='specialiteJournalisteEquipe badge rounded-pill col-7 float-end'></span>
+  </div>
 </div>
 </div>
 </body>

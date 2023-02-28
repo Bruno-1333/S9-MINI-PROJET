@@ -78,11 +78,51 @@ const journaliste3 = new Journaliste("Érika", "blabla", "Nouveliste", "#0000FFF
 $equipe2.ajouterJournaliste(journaliste3);
 $("#equipe").append($equipe2.toString());
 */
-$("form").submit(function (){
-    // TODO : Validation
+$("form").submit(function (event){
+    // Validation
+    let valide = true;
+
+    // Valider la biographie
+    let bio = $("#bio").val();
+    let regex = new RegExp("^[A-Z].*!");
+    if (!regex.test(bio)){
+        $("#erreurBio").removeClass("d-none");
+        valide = false;
+    }
+    else {
+        $("#erreurBio").addClass("d-none");
+    }
+
+    //Valider spécialité
+    let $specialite = $("#specialite").val();
+    for (let i = 0; i < $equipe.tabJournalistes.length; i++){
+        if ($specialite === $equipe.tabJournalistes[i].specialite){
+            $("#erreurSpecialite").removeClass("d-none");
+            valide = false;
+        }
+        else  {
+            $("#erreurSpecialite").addClass("d-none");
+        }
+    }
+
+    //Valider couleur
+    let $couleur = $("#couleur").val();
+    for (let i = 0; i < $equipe.tabJournalistes.length; i++){
+        if ($couleur === $equipe.tabJournalistes[i].couleur){
+            $("#erreurCouleur").removeClass("d-none");
+            valide = false;
+        }
+        else  {
+            $("#erreurCouleur").addClass("d-none");
+        }
+    }
+
+    if (!valide){
+        event.preventDefault();
+    }
 });
 
-// Au chargement (pas besoin de fonction si on utilise defer
+// Au chargement (pas besoin de fonction si on utilise defer)
 // Créer une équipe
 const $equipe = new Equipe();
 // Désérialiser l'équipe contenu dans la session
@@ -90,14 +130,34 @@ const $jsonObject = JSON.parse(sessionStorage.getItem("equipe"));
 $equipe.deserialiser($jsonObject);
 
 // Récupérer les données de l'URL
-let urlData = location.search.substring(1);
+let urlData = location.search.substring(1).replace('+', ' ');
 let tabData = urlData.split("&");
 
 if(urlData !== "" && tabData[0].split("=")[0] === "nom"){
     // Créer un journaliste
-    const $journaliste = new Journaliste(tabData[0].split("=")[1], tabData[1].split("=")[1], tabData[2].split("=")[1], "#"+tabData[3].split("=")[1].substring(3));
+    const $journaliste = new Journaliste(tabData[0].split("=")[1],
+        tabData[1].split("=")[1],
+        tabData[2].split("=")[1],
+        "#"+tabData[3].split("=")[1].substring(3));
     $equipe.ajouterJournaliste($journaliste)
 
-    $("#equipe").append($equipe.toString());
+    // Enregistrer l'équipe dans la session
+    sessionStorage.setItem("equipe", JSON.stringify($equipe)); // Sérialiser et sauvegarder dans la session
+
+    // Afficher l'équipe avec toString
+    //$("#equipe").append($equipe.toString());
+
+    //Afficher l'équipe dans des éléments html
+    $(".nomJournalisteEquipe").text($equipe.tabJournalistes[0].nom);
+    $(".specialiteJournalisteEquipe").text($equipe.tabJournalistes[0].specialite);
+    $(".specialiteJournalisteEquipe").css('background-color', $equipe.tabJournalistes[0].couleur);
+
+    //Cloner la rangée pour afficher les autres membres de l'équipe
+    for (let i=1; i < $equipe.tabJournalistes.length; i++){
+        $(".JournalisteEquipe:last").clone().insertAfter(".JournalisteEquipe:last");
+        $(".nomJournalisteEquipe:last").text($equipe.tabJournalistes[i].nom);
+        $(".specialiteJournalisteEquipe:last").text($equipe.tabJournalistes[i].specialite);
+        $(".specialiteJournalisteEquipe:last").css('background-color', $equipe.tabJournalistes[i].couleur);
+    }
 }
 
